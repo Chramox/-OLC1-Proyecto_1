@@ -66,15 +66,6 @@ namespace _OLC1_Proyecto_1
                                    // PALABRAS RESERVADAS
             CONJUNTO
 
-
-
-            // [NO SE CUALES VAN A SER MIS PALABRAS RESERVADAS TODAVIA]
-            //        TIPOS DE VARIABLES
-            //        INT, //    
-            //        FLOAT, //     
-            //        CHAR, //     
-            //        STRING, //     
-            //        BOOL, //    
         }
         public Token() { } // NADA MAS INICIALIZANDO
         public Token(Tipo type, String val, int id, int fila, int columna)
