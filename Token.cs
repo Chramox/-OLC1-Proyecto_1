@@ -15,6 +15,15 @@ namespace _OLC1_Proyecto_1
         private int columna;
         private int fila;
 
+
+        public int GetColumna() 
+        {
+            return columna;
+        }
+        public int GetFila() 
+        {
+            return fila;
+        }
         public enum Tipo
         {
             // SIMBOLOS ESPECIALES POR CODIGO ASCII
@@ -77,12 +86,12 @@ namespace _OLC1_Proyecto_1
             this.columna = columna;
         }
 
-        public String getValorToken()
+        public String GetValorToken()
         {
             return valorToken;
         }
 
-        public Tipo getTipoToken()
+        public Tipo GetTipoToken()
         {
             return tipoToken;
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _OLC1_Proyecto_1
 {
@@ -11,6 +13,9 @@ namespace _OLC1_Proyecto_1
         //VARIABLES
         LinkedList<Token> listaTokens = new LinkedList<Token>();
         LinkedList<Token> listaErrores = new LinkedList<Token>();
+        LinkedList<String> listaConjuntos = new LinkedList<String>();
+        //STRING es un vector de letras, va a contener todo el conjunto
+
         int idToken;
         int fila = 1;
         int columna = 1;
@@ -21,6 +26,14 @@ namespace _OLC1_Proyecto_1
         bool esComentarioMultiple = false;
         bool esNumeroFlotante = false;
 
+        public LinkedList<Token> getlistaTokens()
+        {
+            return listaTokens;
+        }
+        public LinkedList<Token> getlistaErrores()
+        {
+            return listaErrores;
+        }
         public void separarLineas(String Lineas)
         {
             Lineas += "Ç";
@@ -33,7 +46,7 @@ namespace _OLC1_Proyecto_1
             {
                 foreach (var Token in listaTokens)
                 {
-                    Console.WriteLine(Token.getValorToken() + "<------>" + Token.getTipoToken());
+                    Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                 }
             }
         }
@@ -60,13 +73,13 @@ namespace _OLC1_Proyecto_1
                         Console.WriteLine("FIN ANALISIS");
                         foreach (var Token in listaTokens)
                         {
-                            Console.WriteLine(Token.getValorToken() + "<------>" + Token.getTipoToken());
+                            Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                         }
                         if (listaErrores.Count != 0)
                         {
                             foreach (var Token in listaErrores)
                             {
-                                Console.WriteLine(Token.getValorToken() + "<------>" + Token.getTipoToken());
+                                Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                             }
                         }
                         break;
@@ -120,13 +133,13 @@ namespace _OLC1_Proyecto_1
                                 {
                                     foreach (var Token in listaTokens)
                                     {
-                                        Console.WriteLine(Token.getValorToken() + "<------>" + Token.getTipoToken());
+                                        Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                                     }
                                     if (listaErrores.Count != 0)
                                     {
                                         foreach (var Token in listaErrores)
                                         {
-                                            Console.WriteLine(Token.getValorToken() + "<------>" + Token.getTipoToken());
+                                            Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                                         }
                                     }
                                 }
@@ -444,6 +457,60 @@ namespace _OLC1_Proyecto_1
                     default:
                         return false;
                 }
+        }
+
+        /*  protected void definirConjuntos() 
+          {
+              Token token;
+              char inicio, final;
+              for (int i = 0; i < listaTokens.Count; i++)
+              {
+                  token = listaTokens.ElementAt(i);
+                  if (token.getTipoToken() == Token.Tipo.CONJUNTO)
+                  {
+                      // i = i + 2 -> nombre; i + 1 -> dos puntos, 
+                      i += 2;
+                      token = listaTokens.ElementAt(i);
+                      Conjunto conjunto = new Conjunto(token.getValorToken());
+                      i += 3; //saltandonos la flechita ->
+                      while (token.getTipoToken() != Token.Tipo.PUNTO_COMA)
+                      {
+                          if (token.getTipoToken() == Token.Tipo.CADENA)//AGREGAR SOLO EL ELEMENTO;
+                          {
+                              inicio = (char)token.getTipoToken();
+                              conjunto.agregarSimbolo(inicio);
+                          }
+                          else if (token.getTipoToken() == Token.Tipo.IDENTIFICADOR) //solo una letra es un identificador 
+                          {
+
+                          }
+                      }
+                  }
+              }
+          }*/
+
+        public void GenerarXML(LinkedList<Token> lista)
+        {
+            using (StreamWriter writer = new StreamWriter(@"Tokens HTML.html"))
+            {
+                //INICIO 
+                String doc = "<ListaTokens>\n";
+                //AGREGA LOS TOKENS ENCONTRADOS
+                foreach (var Token in lista)
+                { 
+                    doc += "<Token>\n"+"\t<Nombre>" + Token.GetTipoToken() + "</Nombre>\n";
+                    doc += "\t<Valor>" + Token.GetValorToken() + "</Valor>\n";
+                    doc += "\t<Fila>" + Token.GetFila() + "</Fila>\n";
+                    doc += "\t<Columna>" + Token.GetColumna() + "</Columna>\n</Token>";
+                }
+                //CERRAR HTML
+                doc += "</ListaTokens>";
+                writer.WriteLine(doc);
+
+            }
+            MessageBox.Show("HTML creado", "Listado Tokens");
+            System.Diagnostics.Process.Start(@"Tokens HTML.html");
+
         }
     }
 }
