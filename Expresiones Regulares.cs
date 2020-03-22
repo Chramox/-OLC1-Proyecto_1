@@ -1,23 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text;  
 using System.Threading.Tasks;
 
 namespace _OLC1_Proyecto_1
 {
     class Expresiones_Regulares
     {
-        LinkedList<Token> tabla_Tokens;
-        LinkedList<Token> expresion_Regular;
 
+        LinkedList<Token> expresion_Regular = new LinkedList<Token>();
+        String nombreExpresion;
+
+        public Expresiones_Regulares() { }
+        public Expresiones_Regulares(String nombre) 
+        {
+            nombreExpresion = nombre;
+        }
+        public LinkedList<Token> GetTokens() 
+        {
+            return expresion_Regular;
+        }
+        public String GetNombre() 
+        {
+            return nombreExpresion; 
+        }
+        public void AñadirElemento(Token token) 
+        {
+            expresion_Regular.AddLast(token);
+        }
         //VA A FUNCIONAR COMO UN MINI ANALIZADOR SINTACTICO PARA OBTENER LAS EXPRESIONES REGULARES
-
         public void generarArbol()  //GENERA EL ARBOL PARA METER THOMPSON DESPUES
         {
 
         }
-        public void busqueda_expresion() // es el metodo emparejar
+      /*  public void busqueda_expresion(LinkedList<Token> tabla_Tokens) // es el metodo emparejar, busca la expresion regular y la guarda
         {
             Token actual;
             for (int i = 0; i < tabla_Tokens.Count; i++)
@@ -25,6 +42,8 @@ namespace _OLC1_Proyecto_1
                 actual = tabla_Tokens.ElementAt(i);
                 if (actual.GetTipoToken() == Token.Tipo.IDENTIFICADOR)
                 {
+                    Expresiones_Regulares expresion = new Expresiones_Regulares();
+                    expresion.nombreExpresion = actual.GetValorToken();
                     i++;
                     actual = tabla_Tokens.ElementAt(i);
                     if (actual.GetTipoToken() == Token.Tipo.GUION)
@@ -39,10 +58,11 @@ namespace _OLC1_Proyecto_1
                             {
                                 if (actual.GetTipoToken() != Token.Tipo.PUNTO_COMA)
                                 {
-                                    expresion_Regular.AddLast(actual);
+                                    expresion.expresion_Regular.AddLast(actual);
                                 }
                                 else
                                 {
+                                    listaExpresiones.AddLast(expresion);
                                     break;
                                 }
                             }
@@ -51,6 +71,6 @@ namespace _OLC1_Proyecto_1
                 }
             }
         }
-        
+        */
     }
 }

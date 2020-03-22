@@ -15,7 +15,8 @@ namespace _OLC1_Proyecto_1
         private int columna;
         private int fila;
 
-
+        public void SetValor(string val) { valorToken = val; }
+        public void SetTipo(Tipo tipo) { tipoToken = tipo; }
         public int GetColumna() 
         {
             return columna;
@@ -73,8 +74,8 @@ namespace _OLC1_Proyecto_1
                                    // !>
                                    // -----------------------------
                                    // PALABRAS RESERVADAS
-            CONJUNTO
-
+            CONJUNTO,
+            GUION_CURVO
         }
         public Token() { } // NADA MAS INICIALIZANDO
         public Token(Tipo type, String val, int id, int fila, int columna)

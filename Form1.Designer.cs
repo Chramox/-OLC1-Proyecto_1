@@ -6,7 +6,7 @@
         /// Variable del diseñador necesaria.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-
+        
         /// <summary>
         /// Limpiar los recursos que se estén usando.
         /// </summary>
@@ -29,6 +29,13 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btn_derecha = new System.Windows.Forms.Button();
+            this.btn_atras = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.editor = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -45,21 +52,107 @@
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.editor.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.AutoSize = true;
+            this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.btn_derecha);
+            this.panel1.Controls.Add(this.btn_atras);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.richTextBox2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.pictureBox2);
+            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.editor);
             this.panel1.Controls.Add(this.menuStrip1);
             this.panel1.Location = new System.Drawing.Point(0, -4);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1371, 698);
+            this.panel1.Size = new System.Drawing.Size(1391, 937);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // btn_derecha
+            // 
+            this.btn_derecha.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.btn_derecha.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_derecha;
+            this.btn_derecha.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_derecha.Location = new System.Drawing.Point(1272, 45);
+            this.btn_derecha.Name = "btn_derecha";
+            this.btn_derecha.Size = new System.Drawing.Size(51, 36);
+            this.btn_derecha.TabIndex = 9;
+            this.btn_derecha.UseVisualStyleBackColor = false;
+            // 
+            // btn_atras
+            // 
+            this.btn_atras.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.btn_atras.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_izquierda;
+            this.btn_atras.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_atras.Location = new System.Drawing.Point(1215, 45);
+            this.btn_atras.Name = "btn_atras";
+            this.btn_atras.Size = new System.Drawing.Size(51, 36);
+            this.btn_atras.TabIndex = 8;
+            this.btn_atras.UseVisualStyleBackColor = false;
+            this.btn_atras.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(40, 679);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(85, 25);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Consola";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(780, 530);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(206, 25);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Tabla de Transiciones";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(45, 707);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(692, 192);
+            this.richTextBox2.TabIndex = 5;
+            this.richTextBox2.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(780, 62);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(148, 25);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Automata Finito";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox2.Location = new System.Drawing.Point(783, 560);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(561, 339);
+            this.pictureBox2.TabIndex = 3;
+            this.pictureBox2.TabStop = false;
             // 
             // editor
             // 
@@ -68,7 +161,7 @@
             this.editor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.editor.Name = "editor";
             this.editor.SelectedIndex = 0;
-            this.editor.Size = new System.Drawing.Size(604, 599);
+            this.editor.Size = new System.Drawing.Size(696, 599);
             this.editor.TabIndex = 1;
             // 
             // tabPage1
@@ -78,7 +171,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage1.Size = new System.Drawing.Size(596, 570);
+            this.tabPage1.Size = new System.Drawing.Size(688, 570);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Pestaña 1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -88,12 +181,13 @@
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(600, 574);
+            this.richTextBox1.Size = new System.Drawing.Size(688, 574);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
@@ -102,7 +196,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1371, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1391, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -119,21 +213,21 @@
             // abrirArchivoToolStripMenuItem
             // 
             this.abrirArchivoToolStripMenuItem.Name = "abrirArchivoToolStripMenuItem";
-            this.abrirArchivoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.abrirArchivoToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
             this.abrirArchivoToolStripMenuItem.Text = "Abrir Archivo";
             this.abrirArchivoToolStripMenuItem.Click += new System.EventHandler(this.abrirArchivoToolStripMenuItem_Click);
             // 
             // guardarArchivoToolStripMenuItem
             // 
             this.guardarArchivoToolStripMenuItem.Name = "guardarArchivoToolStripMenuItem";
-            this.guardarArchivoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.guardarArchivoToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
             this.guardarArchivoToolStripMenuItem.Text = "Guardar Archivo";
             this.guardarArchivoToolStripMenuItem.Click += new System.EventHandler(this.guardarArchivoToolStripMenuItem_Click);
             // 
             // nuevaPestañaToolStripMenuItem
             // 
             this.nuevaPestañaToolStripMenuItem.Name = "nuevaPestañaToolStripMenuItem";
-            this.nuevaPestañaToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.nuevaPestañaToolStripMenuItem.Size = new System.Drawing.Size(199, 26);
             this.nuevaPestañaToolStripMenuItem.Text = "Nueva Pestaña";
             this.nuevaPestañaToolStripMenuItem.Click += new System.EventHandler(this.nuevaPestañaToolStripMenuItem_Click);
             // 
@@ -185,24 +279,39 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox1.Location = new System.Drawing.Point(783, 87);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(561, 393);
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1368, 690);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(1391, 929);
             this.Controls.Add(this.panel1);
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.editor.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -225,6 +334,14 @@
         private System.Windows.Forms.ToolStripMenuItem reporteDeErroresLexicosToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btn_atras;
+        private System.Windows.Forms.Button btn_derecha;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

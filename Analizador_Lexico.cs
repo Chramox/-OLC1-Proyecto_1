@@ -13,7 +13,8 @@ namespace _OLC1_Proyecto_1
         //VARIABLES
         LinkedList<Token> listaTokens = new LinkedList<Token>();
         LinkedList<Token> listaErrores = new LinkedList<Token>();
-        LinkedList<String> listaConjuntos = new LinkedList<String>();
+        Dictionary<string,Conjunto> listaConjuntos;
+        Dictionary<string,Expresiones_Regulares> listaER;
         //STRING es un vector de letras, va a contener todo el conjunto
 
         int idToken;
@@ -34,6 +35,10 @@ namespace _OLC1_Proyecto_1
         {
             return listaErrores;
         }
+        public Dictionary<string,Expresiones_Regulares> GetListaER() 
+        {
+            return listaER;
+        }
         public void separarLineas(String Lineas)
         {
             Lineas += "Ç";
@@ -42,13 +47,52 @@ namespace _OLC1_Proyecto_1
             {
                 Leer(line);
             }
+            if (listaErrores.Count != 0)
+            {
+                Console.WriteLine("LISTA DE ERRORES");
+                foreach (var Token in listaErrores)
+                {
+                    Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
+                }
+
+            }
             if (listaTokens.Count != 0)
             {
+                RecConjunto rec = new RecConjunto();
+                rec.ReconocerConjuntos(listaTokens);
+                listaER = rec.GetExpresiones();
+                Console.WriteLine("LISTA DE EXPRESIONES REGULARES");
+                foreach (var elementoG in listaER)
+                {
+                    Expresiones_Regulares elemento = elementoG.Value;
+                    Console.WriteLine("Nombre Expresion: " + elemento.GetNombre());
+                    foreach (var item in elemento.GetTokens())
+                    {
+                        Console.WriteLine("Token: " + item.GetValorToken());
+                    }
+                }
+                listaConjuntos = rec.GetConjuntos();
+                Console.WriteLine("LISTA DE CONJUNTOS DECLARADOS");
+                foreach (var conjunto in listaConjuntos)
+                {
+                    Conjunto conjunto1 = conjunto.Value;
+                    Console.WriteLine("Nombre Conjunto: " + conjunto1.GetNombre());
+                    Console.WriteLine("Elementos: ");
+                    byte contador = 0;
+                    foreach (var item in conjunto1.GetElementos())
+                    {
+                        Console.WriteLine(contador +". "+ item);
+                        contador++;
+                    }
+                }
                 foreach (var Token in listaTokens)
                 {
                     Console.WriteLine(Token.GetValorToken() + "<------>" + Token.GetTipoToken());
                 }
+                
+
             }
+            
         }
         public void Leer(String Texto)
         {
@@ -294,13 +338,13 @@ namespace _OLC1_Proyecto_1
 
         public void agregarToken(Token.Tipo Tipo)
         {
+            Console.WriteLine(auxiliarLexema);
             listaTokens.AddLast(new Token(Tipo, auxiliarLexema, idToken, fila, columna));
             auxiliarLexema = "";
             estado = 0;
         }
         public void palabrasReservadas(String auxiliarLexema)
         {
-            Console.WriteLine("Reservada -- Lexema: " + auxiliarLexema);
             //AGREGAR TODAS LAS PALABRAS RESERVADAS
             if (auxiliarLexema.Equals("CONJ"))
             {
@@ -337,6 +381,7 @@ namespace _OLC1_Proyecto_1
         }
         private bool reconocerSimbolos(String c)
         {
+            auxiliarLexema += c;
             if (null == c) { return false; }
             else // ADMIRACION CIERRE, MENOR QUE Y DIAGONAL CASOS ESPECIALES TAMBIEN CASO ESPECIAL LAS COMILLAS --> CADENAS
                 switch (c)
@@ -454,6 +499,10 @@ namespace _OLC1_Proyecto_1
                         idToken = 125;
                         agregarToken(Token.Tipo.LLAVE_CIERRE);
                         return true;
+                    case "~":
+                        idToken = 0;
+                        agregarToken(Token.Tipo.GUION_CURVO);
+                        return true;
                     default:
                         return false;
                 }
@@ -491,7 +540,7 @@ namespace _OLC1_Proyecto_1
 
         public void GenerarXML(LinkedList<Token> lista)
         {
-            using (StreamWriter writer = new StreamWriter(@"Tokens HTML.html"))
+            using (StreamWriter writer = new StreamWriter(@"Tokens HTML.txt"))
             {
                 //INICIO 
                 String doc = "<ListaTokens>\n";
@@ -509,7 +558,7 @@ namespace _OLC1_Proyecto_1
 
             }
             MessageBox.Show("HTML creado", "Listado Tokens");
-            System.Diagnostics.Process.Start(@"Tokens HTML.html");
+            System.Diagnostics.Process.Start(@"Tokens HTML.txt");
 
         }
     }
