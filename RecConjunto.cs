@@ -16,6 +16,7 @@ namespace _OLC1_Proyecto_1
         LinkedList<Token> listaTokens;
         Dictionary<String,Conjunto> conjuntos = new Dictionary<string, Conjunto>();
         Dictionary<String,Expresiones_Regulares> listaER = new Dictionary<string, Expresiones_Regulares>();
+        List<Expresiones_Regulares> listaCadenasEv = new List<Expresiones_Regulares>();
         String inicio, final;
         Conjunto nuevo_conjunto;
 
@@ -28,6 +29,10 @@ namespace _OLC1_Proyecto_1
         public Dictionary<string,Expresiones_Regulares> GetExpresiones() 
         {
             return listaER;
+        }
+        public List<Expresiones_Regulares> GetCadenasEvaluacion() 
+        {
+            return listaCadenasEv;
         }
         //MINI ANALIZADOR SINTACTICO PARA RECONCER LOS CONJUNTOS Y TAMBIEN VA A RECONOCER LAS EXPRESIONES REGULARES
         public void ReconocerConjuntos(LinkedList<Token> lista) 
@@ -71,6 +76,10 @@ namespace _OLC1_Proyecto_1
             if (!listaER.ContainsKey(expresion.GetNombre()))
             {
                 listaER.Add(expresion.GetNombre(), expresion);
+            }
+            else
+            {
+                listaCadenasEv.Add(expresion);
             }
         }
         private void CONJUNTO() 

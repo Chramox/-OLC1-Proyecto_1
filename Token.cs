@@ -86,7 +86,11 @@ namespace _OLC1_Proyecto_1
             this.fila = fila;
             this.columna = columna;
         }
-
+        public Token(Tipo type, String val)
+        {
+            this.tipoToken = type;
+            this.valorToken = val;
+        }
         public String GetValorToken()
         {
             return valorToken;

@@ -11,7 +11,7 @@ namespace _OLC1_Proyecto_1
 
         LinkedList<Token> expresion_Regular = new LinkedList<Token>();
         String nombreExpresion;
-
+        //List<string> cadenasEvaluacion = new List<string>();
         public Expresiones_Regulares() { }
         public Expresiones_Regulares(String nombre) 
         {
@@ -34,6 +34,7 @@ namespace _OLC1_Proyecto_1
         {
 
         }
+
       /*  public void busqueda_expresion(LinkedList<Token> tabla_Tokens) // es el metodo emparejar, busca la expresion regular y la guarda
         {
             Token actual;

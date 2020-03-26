@@ -13,10 +13,10 @@ namespace _OLC1_Proyecto_1
         StringBuilder grafo;
         String ruta1;
         String text = "";
-        String ruta;
+        //String ruta;
         public Graficador()
         {
-            ruta = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+          // ruta = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         }
 
         private void generardot(String rdot, String rpng)
@@ -31,7 +31,6 @@ namespace _OLC1_Proyecto_1
             procedimiento.StartInfo = procStart;
             procedimiento.Start();
             procedimiento.WaitForExit();
-
         }
         public string GraphvizAFN(Stack<AFN> stackAFN)
         {
@@ -53,13 +52,13 @@ namespace _OLC1_Proyecto_1
         private string GraficarAFD(string text) 
         {
             grafo = new StringBuilder();
-            String rdot = ruta + "\\GrafoImagenAFD.dot";
-            String rpng = ruta + "\\GrafoImagenAFD.png";
+            String rdot =  "GrafoImagenAFD" + Form1.contadorIMG + ".dot";
+            String rpng = "GrafoImagenAFD" + Form1.contadorIMG + ".png";
             Form1.rutaAFD = rpng;
             grafo.Append("digraph G{ \nrankdir = LR\nnode[shape = circle];");
             grafo.Append(text);
             grafo.Append("}");
-            ruta1 = ruta + "\\GrafoImagenAFD.png";
+            ruta1 = "GrafoImagenAFD" + Form1.contadorIMG + ".png";
 
             generardot(rdot, rpng);
             return rpng;
@@ -67,13 +66,13 @@ namespace _OLC1_Proyecto_1
         private string GraficarAFDTabla(String text)//falta definir parametros
         {
             grafo = new StringBuilder();
-            String rdot = ruta + "\\GrafoImagenAFDTabla.dot";
-            String rpng = ruta + "\\GrafoImagenAFDTabla.png";
+            String rdot = "GrafoImagenAFDTabla" + Form1.contadorIMG + ".dot";
+            String rpng = "GrafoImagenAFDTabla" + Form1.contadorIMG + ".png";
             Form1.rutaAFD_Tabla = rpng;
             grafo.Append("digraph G  {");
             grafo.Append(text);
             grafo.Append("}");
-            ruta1 = ruta + "\\GrafoImagenAFNTabla.png";
+            ruta1 = "GrafoImagenAFNTabla" + Form1.contadorIMG + ".png";
 
             generardot(rdot, rpng);
             return rpng;
@@ -81,13 +80,13 @@ namespace _OLC1_Proyecto_1
         private string Graficar(String text)//falta definir parametros
         {
             grafo = new StringBuilder();
-            String rdot = "GrafoImagenAFN.dot";
-            String rpng = "GrafoImagenAFN.png";
+            String rdot = "GrafoImagenAFN" + Form1.contadorIMG + ".dot";
+            String rpng = "GrafoImagenAFN" + Form1.contadorIMG + ".png";
             Form1.rutaAFN = rpng;
             grafo.Append("digraph G{ \nrankdir = LR\nnode[shape = circle];");
             grafo.Append(text);
             grafo.Append("}");
-            ruta1 = "GrafoImagenAFN.png";
+            ruta1 = "GrafoImagenAFN" + Form1.contadorIMG + ".png";
 
             generardot(rdot, rpng);
             return rpng;
@@ -111,7 +110,7 @@ namespace _OLC1_Proyecto_1
                 }
                 EnOrder(transicion.GetSegundo().GetTransicionIzq());
                 if (!repeticion)
-                {
+                { 
                     EnOrder(transicion.GetSegundo().GetTransicionDer());
                 }
             }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _OLC1_Proyecto_1
 {
+    
     class AFN
     {
         //AUTOMATA FINITO NO DETERMINISTA
@@ -14,22 +17,169 @@ namespace _OLC1_Proyecto_1
         Estado Inicial;
         Estado Final;
         Stack<AFN> stackAFN = new Stack<AFN>();
+        List<Expresiones_Regulares> cadenas;
+        Dictionary<string, Conjunto> listaConjuntos;
+        Expresiones_Regulares expresion;
+        public AFN ClonarAFN(AFN clonar) 
+        {
+            AFN nuevo = new AFN();
+            nuevo.Inicial = clonar.Inicial;
+            nuevo.Final = clonar.Final;
+            foreach (var item in clonar.GetListaEstados())
+            {
+                nuevo.GetListaEstados().Add(item);
+            }
 
-
+            return nuevo;
+        }
         public AFN() { }
+        public AFN(List<Expresiones_Regulares> listaCadenas, Dictionary<string, Conjunto> listaConjuntos) 
+        { 
+            cadenas = listaCadenas;
+            this.listaConjuntos = listaConjuntos;
+        }
         public List<string> GetListaTerminales() { return listaTerminales; }
         public Estado GetEstadoInicial() { return Inicial; }
         public Estado GetEstadoFinal() { return Final; }
         public List<Estado> GetListaEstados() { return conjuntoEst_Normales; }
+        public List<Token> SustituirCerraduraPositiva(List<Token> er)
+        {
+            List<Token> auxiliar = new List<Token>();
+            List<Token> temporal = new List<Token>();
+            List<Token> listaTokens = er;
+            //Se lee la expresion de izquierda a derecha
+            Console.WriteLine("SUSTITUYENDO CERRADURA POSITIVA");
+            Token token;
+            Token tokenKleen = new Token(Token.Tipo.ASTERISCO, "*");
+            Token tokenConcat = new Token(Token.Tipo.PUNTO, ".");
+            int contAux;
+            for (int i = 0; i < listaTokens.Count; i++)
+            {
+                contAux = i;
+                token = listaTokens.ElementAt(i);
+                if (token.GetTipoToken() == Token.Tipo.OP_SUMA)
+                {
+                    contAux++;
+                   // token = listaTokens.ElementAt(i);
+                    auxiliar.Add(tokenConcat);
+                    bool primerTerminal = true, segundoTerminal = false;
+                    while (!segundoTerminal)
+                    {
+                        token = listaTokens.ElementAt(contAux);
+                        temporal.Add(token);
+                        switch (token.GetTipoToken())
+                        {
+                            case Token.Tipo.PUNTO: //CONCATENACION
+                                {
+                                    primerTerminal = false;
+                                    segundoTerminal = false;
+                                    break;
+                                }
+                            case Token.Tipo.PALITO_OR:  //ALTERNANCIA
+                                {
+                                    primerTerminal = false;
+                                    segundoTerminal = false;
+                                    break;
+                                }
+                            case Token.Tipo.ASTERISCO: //CERRADURA DE KLEEN
+                                {
+                                    primerTerminal = true;
+                                    segundoTerminal = false;
+                                    break;
+                                }
+                            case Token.Tipo.OP_SUMA: //CERRADURA POSITIVA
+                                {
+                                    primerTerminal = true;
+                                    segundoTerminal = false;
+                                    break;
+                                }
+                            case Token.Tipo.PREGUNTA_CIERRE: //APARICION
+                                {
+                                    primerTerminal = true;
+                                    segundoTerminal = false;
+                                    break;
+                                }
+                            default:
+                                { //operando
+                                    if (primerTerminal == true)
+                                    {
+                                        segundoTerminal = true;
+                                    }
+                                    else
+                                    {
+                                        primerTerminal = true;
+                                    }
+                                    break;
+                                }
+                        }
+                        contAux++;
+                    }
+                    i = contAux-1;
+                    auxiliar.AddRange(temporal);
+                    auxiliar.Add(tokenKleen);
+                    auxiliar.AddRange(temporal);
+                    temporal.Clear();
+                }
+                else
+                {
+                    auxiliar.Add(token);
+                }
+
+            }
+            foreach (var item in auxiliar)
+            {
+                Console.WriteLine(item.GetValorToken());
+            }
+            return auxiliar;
+        }
         public void GenerarAFN(Expresiones_Regulares expresion)
         {
-            //AFN inicial = Operando("epsilon");
-            for (int i = expresion.GetTokens().Count - 1; i >= 0; i--)
+            this.expresion = expresion;
+            bool suma = true;
+            Token token1;
+            List<Token> nuevaER = expresion.GetTokens().ToList();
+            List<Token> auxiliar = new List<Token>();
+            foreach (var item in nuevaER)
             {
-                GenerarThompson(expresion.GetTokens().ElementAt(i));
+                if (item.GetTipoToken() == Token.Tipo.LLAVE_APERTURA || item.GetTipoToken() == Token.Tipo.LLAVE_CIERRE)
+                {
+
+                }
+                else
+                {
+                    auxiliar.Add(item);
+                }
+            }
+
+            nuevaER = SustituirCerraduraPositiva(auxiliar);
+            
+            while (suma)
+            {
+                for (int i = 0; i < nuevaER.Count; i++)
+                {
+                    token1 = nuevaER.ElementAt(i);
+                    if (token1.GetTipoToken() == Token.Tipo.OP_SUMA)
+                    {
+                        suma = true;
+                        break;
+                    }
+                    else
+                    {
+                        suma = false;
+                    }
+                }
+                if (suma)
+                {
+                    nuevaER = SustituirCerraduraPositiva(nuevaER);
+                }
+            }
+            //AFN inicial = Operando("epsilon");
+            for (int i = nuevaER.Count - 1 ; i >= 0; i--)
+            {
+                GenerarThompson(nuevaER.ElementAt(i));
             }
             //ORDENANDO LOS ESTADOS
-            AFN final = stackAFN.Peek();
+            AFN final = stackAFN.Pop();
             int contadorEst = 1;
             //final = Concatenacion(inicial, final);
             //stackAFN.Push(final);
@@ -40,7 +190,8 @@ namespace _OLC1_Proyecto_1
                 contadorEst++;
             }
             final.Final.SetNumeroEstado(contadorEst);
-            foreach (var token in expresion.GetTokens())
+            stackAFN.Push(final);
+            foreach (var token in nuevaER)
             {
                 switch (token.GetTipoToken())
                 {
@@ -102,15 +253,6 @@ namespace _OLC1_Proyecto_1
                         stackAFN.Push(kleen);
                         break;
                     }
-                //case Token.Tipo.OP_SUMA: 
-                //    {
-                //        AFN concat = new AFN();
-                //        concat = stackAFN.Peek();
-                //        AFN kleen = CerraduraKleen(stackAFN.Pop());
-                //        AFN positiva = Concatenacion(concat,kleen);
-                //        stackAFN.Push(positiva);
-                //        break;
-                //    }
                 case Token.Tipo.PREGUNTA_CIERRE: //APARICION
                     {
                         AFN aparicion = Aparicion(stackAFN.Pop());
@@ -301,12 +443,23 @@ namespace _OLC1_Proyecto_1
         {
             string[] hola = new string[2];
             AFN automataAF = stackAFN.Peek();
-            AFD automata = new AFD(automataAF, automataAF.GetListaTerminales());
+            AFD automata = new AFD(automataAF, automataAF.GetListaTerminales(), listaConjuntos);
             automata.CrearAFD();
             hola[0] = automata.GenerarGraphvizAFD();
             hola[1] = automata.GenerarGraphivizAFDTabla();
+            foreach (var item in cadenas)
+            {
+                if (item.GetNombre().Equals(expresion.GetNombre()))
+                {
+                    Form1.textConsola += automata.validarCadena(item);
+                }
+            }
             return hola;
         }
 
+        public object Clone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace _OLC1_Proyecto_1
         LinkedList<Token> listaErrores = new LinkedList<Token>();
         Dictionary<string,Conjunto> listaConjuntos;
         Dictionary<string,Expresiones_Regulares> listaER;
+        List<Expresiones_Regulares> listaCadenas;
         //STRING es un vector de letras, va a contener todo el conjunto
 
         int idToken;
@@ -27,6 +28,7 @@ namespace _OLC1_Proyecto_1
         bool esComentarioMultiple = false;
         bool esNumeroFlotante = false;
 
+        public Dictionary<string, Conjunto> GetConjuntos() { return listaConjuntos; }
         public LinkedList<Token> getlistaTokens()
         {
             return listaTokens;
@@ -39,6 +41,7 @@ namespace _OLC1_Proyecto_1
         {
             return listaER;
         }
+        public List<Expresiones_Regulares> GetCadenasEv() { return listaCadenas; }
         public void separarLineas(String Lineas)
         {
             Lineas += "Ç";
@@ -61,6 +64,7 @@ namespace _OLC1_Proyecto_1
                 RecConjunto rec = new RecConjunto();
                 rec.ReconocerConjuntos(listaTokens);
                 listaER = rec.GetExpresiones();
+                listaCadenas = rec.GetCadenasEvaluacion();
                 Console.WriteLine("LISTA DE EXPRESIONES REGULARES");
                 foreach (var elementoG in listaER)
                 {

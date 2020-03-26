@@ -14,17 +14,22 @@ namespace _OLC1_Proyecto_1
         List<string> listaTerminales;
         List<EstadoAFD> listaGeneralEstados = new List<EstadoAFD>();
         List<Mueve> mueves = new List<Mueve>();
-        public static int nombreEstadoAFD = 65;
+        EstadoAFD estVacio = new EstadoAFD();
+        List<Mueve> mueveSinVacio;
+        Dictionary<string, Conjunto> listaConjuntos;
+        public static int nombreEstadoAFD = 0;
         public AFD() { }
-        public AFD(AFN automata, List<string>listaTerminales) 
+        public AFD(AFN automata, List<string>listaTerminales, Dictionary<string, Conjunto> listaConjuntos) 
         {
             automataND = automata;
             this.listaTerminales = listaTerminales;
+            this.listaConjuntos = listaConjuntos;
         }
         private void DefinirMueves() { }
         public void CrearAFD() 
         {
-            nombreEstadoAFD = 65;
+            estVacio.SetNombreEstadoAFD(-1);
+            nombreEstadoAFD = 0;
             Queue<EstadoAFD> colaEstadosAFD = new Queue<EstadoAFD>();
             List<Estado> estados1 = new List<Estado>();
             estados1.Add(automataND.GetEstadoInicial());
@@ -38,62 +43,66 @@ namespace _OLC1_Proyecto_1
             Mueve mueve;
             while (colaEstadosAFD.Count > 0)
             {
-
                 EstadoAFD temp = colaEstadosAFD.Dequeue();
                 foreach (var terminal in listaTerminales)
                 {
                     List<Estado> estados = Mueve(temp.GetEstadosAlcanzados(),terminal);
                     //ida y simbolo
-                    mueve = new Mueve(temp.GetNombreEstadoAFD().ToString(),terminal);
+                    mueve = new Mueve(temp,terminal);
                     bool entrar = true;
-                    int estadoSal = 0;
-                    bool agregar = false;
+                    EstadoAFD estadoAFD_nuevo = Cerradura(estados);
+                    Console.WriteLine("estados mueves");
+                    Console.WriteLine("ESTADO " + estadoAFD_nuevo.GetNombreEstadoAFD());
+                    string hola = "";
+                    foreach (var item in estadoAFD_nuevo.GetEstadosAlcanzados())
+                    {
+                        hola += item.GetNoEstado().ToString() + ", ";
+                    }
+                    Console.WriteLine(hola);
                     foreach (var estado in estados)
                     {
                         entrar = true;
-                        EstadoAFD estadoAFD_nuevo = Cerradura(estados);
-                        agregar = false;
+                        
+                        Console.WriteLine("estado act: " + temp.GetNombreEstadoAFD() + " estAFD: " +estadoAFD_nuevo.GetNombreEstadoAFD() + " simbolo: " + terminal);
                         for (int i = 0; i < listaEstadosAFD.Count; i++)
                         {
                             
-                            if (CompararEstadosAFD(listaEstadosAFD.ElementAt(i).GetEstadosAlcanzados(),estadoAFD_nuevo.GetEstadosAlcanzados()) == false)
+                            if (CompararEstadosAFD(listaEstadosAFD.ElementAt(i).GetEstadosAlcanzados(), estadoAFD_nuevo.GetEstadosAlcanzados()) == false)
                             {
                                 entrar = false;
-                                agregar = true;
-                                mueve.SetLlegada(listaEstadosAFD.ElementAt(i).GetNombreEstadoAFD().ToString());
+                                mueve.SetLlegada(listaEstadosAFD.ElementAt(i));
                                 mueves.Add(mueve);
+                                nombreEstadoAFD = listaGeneralEstados.Last().GetNombreEstadoAFD() + 1;
                                 break;
                             }
-                            else
-                            {
-                                agregar = true;
-                            }
-                            estadoSal = i;
                         }
-                        estadoSal += 66;
                         if (entrar)
                         {
                             //llegada
-                            mueve.SetLlegada(estadoAFD_nuevo.GetNombreEstadoAFD().ToString());
+                            mueve.SetLlegada(estadoAFD_nuevo);
                             mueves.Add(mueve);
                             listaGeneralEstados.Add(estadoAFD_nuevo);
                             colaEstadosAFD.Enqueue(estadoAFD_nuevo);
                             listaEstadosAFD.Add(estadoAFD_nuevo);
                         }
-
                     }
                     //if (agregar)
                     //{
-                    //    char a = (char)estadoSal;
+                    //    char a = estadoSal;
                     //    mueve.SetLlegada(a.ToString());
                     //    mueves.Add(mueve);
                     //    agregar = false;
                     //}
                     if (estados.Count == 0)
                     {
-                        mueve.SetLlegada("");
+                        mueve.SetLlegada(estVacio);
                         mueves.Add(mueve);
+                        nombreEstadoAFD = listaGeneralEstados.Last().GetNombreEstadoAFD() + 1;
                     }
+                    //else if (entrar == false)
+                    //{
+                    //    nombreEstadoAFD--;
+                    //}
                     //llegada vacia
                 }
                 
@@ -111,14 +120,14 @@ namespace _OLC1_Proyecto_1
             }
             foreach (var item in mueves)
             {
-                Console.WriteLine("inicio: " + item.GetInicial() + " llegada: " + item.GetLlegada() + " simbolo: " + item.GetSimbolo());
+                Console.WriteLine("inicio: " + item.GetInicialString() + " llegada: " + item.GetLlegadaString() + " simbolo: " + item.GetSimbolo());
             }
             //GenerarGraphivizAFDTabla();
             //GenerarGraphvizAFD();
         }
-        private bool CompararEstadosAFD(List<Estado>lista1, List<Estado>lista2) 
+        private bool CompararEstadosAFD(List<Estado>listaA, List<Estado>listaB) 
         {
-            List<Estado> excepciones = lista1.Except(lista2).ToList();
+            List<Estado> excepciones = listaB.Except(listaA).ToList();
             if (excepciones.Count > 0)
             {
                 return true; //iguales
@@ -130,15 +139,36 @@ namespace _OLC1_Proyecto_1
         }
         public string GenerarGraphvizAFD() 
         {
-            string text = "";
+            string text = "A -> 0;";
+            List<Mueve> listaMueves = new List<Mueve>();
             for (int i = 0; i < mueves.Count; i++)
             {
                 Mueve mueve = mueves.ElementAt(i);
-                if (!mueve.GetLlegada().Equals(""))
+
+                
+                if (!mueve.GetLlegadaString().Equals("-1") && !text.Contains(mueve.GetInicialString() + " -> " + mueve.GetLlegadaString() + "[label=\"" + mueve.GetSimbolo() + "\"]"))
                 {
-                    text += mueve.GetInicial() + " -> " + mueve.GetLlegada() + "[label=\"" + mueve.GetSimbolo() + "\"]";
+                    text += mueve.GetInicialString() + " -> " + mueve.GetLlegadaString() + "[label=\"" + mueve.GetSimbolo() + "\"]";
+                    listaMueves.Add(mueve);
                 }
             }
+            mueveSinVacio = listaMueves;
+            string formas = "A[shape = point]";
+            foreach (var item in mueves)
+            {
+                if (item.GetEstadoInicial().GetNombreEstadoAFD() != -1)
+                {
+                    if (!formas.Contains(item.GetInicialString() + "[shape = doublecircle];"))
+                    {
+                        if (item.GetEstadoInicial().GetTipo() == EstadoAFD.Tipo.FINAL)
+                        {
+                            formas += item.GetInicialString() + "[shape = doublecircle];";
+                        }
+                    }
+                }
+            }
+            text += formas;
+           
             Graficador graficador = new Graficador();
             return graficador.GraphvizAFD(text);
         }
@@ -147,7 +177,8 @@ namespace _OLC1_Proyecto_1
             string text = "node[ shape = none, fontname = \"Arial\" ];\n";
             text += "set1[ label=<" + "<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n";
             text += " <TR>\n<TD> Estado </TD>";
-            
+            List<Mueve> sinRepeticion = new List<Mueve>();
+
             foreach (var simbolo in listaTerminales)
             {
                 text += "<TD>" + simbolo + "</TD>"; 
@@ -156,27 +187,44 @@ namespace _OLC1_Proyecto_1
             bool entrada;
             for (int i = 0; i < mueves.Count-1; i++)
             {
-                string estadoAct = mueves.ElementAt(i).GetInicial();
+                string estadoAct = mueves.ElementAt(i).GetInicialString();
                 //Estado
-                text += "<TR>\n<TD>" + estadoAct + "</TD>";
-                entrada = false;
-                for (int j = 0; j < mueves.Count; j++)
+                if (!text.Contains("<TR>\n<TD>" + estadoAct + "</TD>"))
                 {
-                    if (estadoAct.Equals(mueves.ElementAt(j).GetInicial()))
+                    sinRepeticion.Add(mueves.ElementAt(i));
+                    text += "<TR>\n<TD>" + estadoAct + "</TD>";
+                    entrada = false;
+                    for (int j = 0; j < mueves.Count; j++)
                     {
-                        text += "<TD>" + mueves.ElementAt(j).GetLlegada() + "</TD>";
-                        entrada = true;
+                        if (estadoAct.Equals(mueves.ElementAt(j).GetInicialString()))
+                        {
+                            if (mueves.ElementAt(j).GetLlegadaString().Equals("-1"))
+                            {
+                                text += "<TD> - </TD>";
+                            }
+                            else
+                            {
+                                text += "<TD>" + mueves.ElementAt(j).GetLlegadaString() + "</TD>";
+                            }
+
+                            entrada = true;
+                        }
+                        else if (entrada == true)//ya se encontraron todos
+                        {
+                            i = j - 1;
+                            break;
+                        }
                     }
-                    else if (entrada == true)//ya se encontraron todos
-                    {
-                        i = j - 1;
-                        break;
-                    }
+                    text += "</TR>";
                 }
-                text += "</TR>";
+                else
+                {
+                    break;
+                }
+                
             }
             text += "</TABLE>>];";
-
+            mueves = sinRepeticion;
             Graficador graficador = new Graficador();
             return graficador.GraphvizAFDTabla(text);
         }
@@ -221,14 +269,22 @@ namespace _OLC1_Proyecto_1
                 listaEstados.Add(estado);
             }
             
-            EstadoAFD estadoAFD = new EstadoAFD((char)nombreEstadoAFD++,numeroEstados,listaEstados);
+            EstadoAFD estadoAFD = new EstadoAFD(nombreEstadoAFD++,numeroEstados,listaEstados);
+            if (listaEstados.Contains(automataND.GetEstadoFinal()))
+            {
+                estadoAFD.SetTipoEstado(EstadoAFD.Tipo.FINAL);
+            }
+            else
+            {
+                estadoAFD.SetTipoEstado(EstadoAFD.Tipo.NORMAL);
+            }
             //Console.WriteLine("PRUEBA ESTADOS POR " + "epsilon");
             //string alv = "";
             //foreach (Estado est in listaEstados)
             //{
             //    alv += est.GetNoEstado();
             //}
-            
+
             return estadoAFD;
             
         }
@@ -246,7 +302,7 @@ namespace _OLC1_Proyecto_1
                     estadosAlcanzados.Add(transicion.GetSegundo());
                 }
                 transicion = actual.GetTransicionIzq();
-                if (transicion != null &&
+                  if (transicion != null &&
                     transicion.GetTransicionSimbolo().Equals(terminal)
                     && !estadosAlcanzados.Contains(transicion.GetSegundo()))
                 {
@@ -255,7 +311,115 @@ namespace _OLC1_Proyecto_1
             }
             return estadosAlcanzados;
         }
-        
 
+        public string validarCadena(Expresiones_Regulares expresionEv) 
+        {
+            int estadoActual = 0;
+            bool valido = false;
+            List<int> estadosFinales = new List<int>();
+            foreach (var item in mueves)
+            {
+                EstadoAFD estado = item.GetEstadoInicial();
+                if (!estadosFinales.Contains(estado.GetNombreEstadoAFD()))
+                {
+                    if (estado.GetTipo() == EstadoAFD.Tipo.FINAL )
+                    {
+                        estadosFinales.Add(estado.GetNombreEstadoAFD());
+                    }
+                }
+                
+            }
+            string impresion = "";
+           // Mueve mueveActual = mueveSinVacio.First();
+            string evaluar = expresionEv.GetTokens().Last().GetValorToken();//como es una cadena solo tiene uno
+
+            List<Mueve> listaTemp = new List<Mueve>();
+            for (int i = 0; i < evaluar.Length; i++)//evaluando letra por letra
+            {
+                listaTemp.Clear();
+                char letra = evaluar[i];
+                valido = false; //reiniciando variable
+
+                foreach (var mov in mueveSinVacio)
+                {
+                    if (mov.GetEstadoInicial().GetNombreEstadoAFD() == estadoActual)
+                    {
+                        listaTemp.Add(mov);
+                    }
+                }
+                //obtenemos solo los mueves que tienen de estado inicial al estado actual
+                List<Mueve> listOrdernada = listaTemp.OrderByDescending(o=>o.GetSimbolo().Length).ToList();
+                Console.WriteLine("LISTA ORDENADA");
+                foreach (var item in listOrdernada)
+                {
+                    Console.WriteLine("estadoInicial " + item.GetInicialString() + "simbolo: " + item.GetSimbolo() + " final: " + item.GetLlegadaString() );
+                }
+                //los mueves se orden de mayor a menor, segun la longitud de su transicion
+                for (int j = 0; j < listOrdernada.Count; j++)
+                {
+                    Mueve mueve = listOrdernada.ElementAt(j);
+                    string simboloTransicion = mueve.GetSimbolo();
+                    //bool esConjunto = true;
+
+                    if (simboloTransicion.Length > 1) //cadenas mayores a uno
+                    {
+                        int longitud = simboloTransicion.Length + i;
+                        if (longitud <= evaluar.Length)
+                        {
+                            longitud -= i;
+                            string subCadena = evaluar.Substring(i, longitud);
+                            Console.WriteLine("subcadena " + subCadena + " simbolo " + simboloTransicion);
+                            if (subCadena.Equals(mueve.GetSimbolo()))
+                            {
+                                estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
+                                i += subCadena.Length-1;
+                                valido = true;
+                                break;
+                            }
+                        }   
+                    }
+                    if (listaConjuntos.ContainsKey(simboloTransicion)) //comparando si es un conjunto
+                    {
+                        Conjunto conjunto = listaConjuntos[simboloTransicion];
+                        if (conjunto.GetElementos().Contains(letra.ToString()))//iguala con algun elemento de un conjunto
+                        {
+                            estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
+                            valido = true;
+                            break;
+                        }
+                    }
+                    else if(simboloTransicion == letra.ToString())
+                    {
+                        estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
+                        valido = true;
+                        break;
+                    }
+                   // Console.WriteLine("valida: " + valido);
+                }
+                Console.WriteLine("valida: " + valido);
+                //si sale del segundo for sin encontrar una coincidencia es que no se puede, y la cadena no es valida
+                if (valido == false)
+                {
+                    break; //No vale la pena seguir evaluando la expresion entonces para
+                }
+            }
+            //Al salir la variable estadoActual debe ser un estado final para que la expresion sea valida
+            if (valido == false)
+            {
+                impresion += expresionEv.GetNombre() + ": \"" + evaluar + "\" NO ES VALIDA, para la expresion regular evaluada\n";
+            }
+            else
+            {
+                if (estadosFinales.Contains(estadoActual))
+                {
+                    impresion += expresionEv.GetNombre() + ": \"" + evaluar+ "\" ES VALIDA, para la expresion regular evaluada\n";
+                }
+                else
+                {
+                    impresion += expresionEv.GetNombre() + ": \"" + evaluar + "\" NO ES VALIDA, para la expresion regular evaluada\n";
+                }
+            }
+            return impresion;
+        }
     }
 }
