@@ -52,7 +52,8 @@ namespace _OLC1_Proyecto_1
             Token token;
             Token tokenKleen = new Token(Token.Tipo.ASTERISCO, "*");
             Token tokenConcat = new Token(Token.Tipo.PUNTO, ".");
-            int contAux;
+            Token tokenAnt = new Token(Token.Tipo.CADENA, " ");
+           int contAux;
             for (int i = 0; i < listaTokens.Count; i++)
             {
                 contAux = i;
@@ -62,9 +63,13 @@ namespace _OLC1_Proyecto_1
                     contAux++;
                    // token = listaTokens.ElementAt(i);
                     auxiliar.Add(tokenConcat);
-                    bool primerTerminal = true, segundoTerminal = false;
+                    bool primerTerminal = true, segundoTerminal = false, anteriorBinario = false;
                     while (!segundoTerminal)
                     {
+                        if (contAux-1>0)
+                        {
+                            tokenAnt = listaTokens.ElementAt(contAux - 1);
+                        }
                         token = listaTokens.ElementAt(contAux);
                         temporal.Add(token);
                         switch (token.GetTipoToken())
@@ -73,12 +78,20 @@ namespace _OLC1_Proyecto_1
                                 {
                                     primerTerminal = false;
                                     segundoTerminal = false;
+                                    if (tokenAnt.GetTipoToken() == Token.Tipo.PUNTO || tokenAnt.GetTipoToken() == Token.Tipo.PALITO_OR)
+                                    {
+                                        anteriorBinario = true;
+                                    }
                                     break;
                                 }
                             case Token.Tipo.PALITO_OR:  //ALTERNANCIA
                                 {
                                     primerTerminal = false;
                                     segundoTerminal = false;
+                                    if (tokenAnt.GetTipoToken() == Token.Tipo.PUNTO || tokenAnt.GetTipoToken() == Token.Tipo.PALITO_OR)
+                                    {
+                                        anteriorBinario = true;
+                                    }
                                     break;
                                 }
                             case Token.Tipo.ASTERISCO: //CERRADURA DE KLEEN
@@ -101,9 +114,14 @@ namespace _OLC1_Proyecto_1
                                 }
                             default:
                                 { //operando
-                                    if (primerTerminal == true)
+                                    if (primerTerminal == true && anteriorBinario == false)
                                     {
                                         segundoTerminal = true;
+                                    }
+                                    else if(anteriorBinario)
+                                    { 
+                                        primerTerminal = false;
+                                        anteriorBinario = false;
                                     }
                                     else
                                     {
@@ -126,10 +144,6 @@ namespace _OLC1_Proyecto_1
                 }
 
             }
-            foreach (var item in auxiliar)
-            {
-                Console.WriteLine(item.GetValorToken());
-            }
             return auxiliar;
         }
         public void GenerarAFN(Expresiones_Regulares expresion)
@@ -150,9 +164,7 @@ namespace _OLC1_Proyecto_1
                     auxiliar.Add(item);
                 }
             }
-
-            nuevaER = SustituirCerraduraPositiva(auxiliar);
-            
+            nuevaER = auxiliar;
             while (suma)
             {
                 for (int i = 0; i < nuevaER.Count; i++)
@@ -172,6 +184,10 @@ namespace _OLC1_Proyecto_1
                 {
                     nuevaER = SustituirCerraduraPositiva(nuevaER);
                 }
+            }
+            foreach (var item in nuevaER)
+            {
+                Console.WriteLine(item.GetValorToken());
             }
             //AFN inicial = Operando("epsilon");
             for (int i = nuevaER.Count - 1 ; i >= 0; i--)

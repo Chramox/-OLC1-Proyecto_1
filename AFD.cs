@@ -334,6 +334,10 @@ namespace _OLC1_Proyecto_1
             string evaluar = expresionEv.GetTokens().Last().GetValorToken();//como es una cadena solo tiene uno
 
             List<Mueve> listaTemp = new List<Mueve>();
+            if (evaluar.Length == 0 && estadosFinales.Contains(0))
+            {
+                valido = true;
+            }
             for (int i = 0; i < evaluar.Length; i++)//evaluando letra por letra
             {
                 listaTemp.Clear();
@@ -373,6 +377,13 @@ namespace _OLC1_Proyecto_1
                             {
                                 estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
                                 i += subCadena.Length-1;
+                                valido = true;
+                                break;
+                            }
+                            if (simboloTransicion.Equals("[:todo:]") && !subCadena.Equals("\\n"))
+                            {
+                                estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
+                                i += subCadena.Length - 1;
                                 valido = true;
                                 break;
                             }

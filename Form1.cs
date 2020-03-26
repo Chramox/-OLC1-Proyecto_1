@@ -195,7 +195,7 @@ namespace _OLC1_Proyecto_1
                 string imagen = listaAutomatas.ElementAt(contador);
                 if (System.IO.File.Exists(imagen))
                 {
-                    listaAutomatas.Add(imagen);
+                    //listaAutomatas.Add(imagen);
                     System.Drawing.Image image = System.Drawing.Image.FromFile(imagen);
                     pictureBox1.Image = image;
                 }
@@ -224,7 +224,7 @@ namespace _OLC1_Proyecto_1
                 string imagen = listaAutomatas.ElementAt(contador);
                 if (System.IO.File.Exists(imagen))
                 {
-                    listaAutomatas.Add(imagen);
+                    //listaAutomatas.Add(imagen);
                     Image image = Image.FromFile(imagen);
                     pictureBox1.Image = image;
                 }
@@ -257,7 +257,7 @@ namespace _OLC1_Proyecto_1
                 table.AddCell("VALOR");
                 table.AddCell("COLUMNA");
                 table.AddCell("FILA");
-
+               
                 foreach (var error in ListaErrores)
                 {
                     table.AddCell(error.GetValorToken());
@@ -267,7 +267,14 @@ namespace _OLC1_Proyecto_1
 
                 doc.Add(new Paragraph("\n\n\n\n"));
 
-
+                if (ListaErrores.Count == 0)
+                {
+                    doc.Add(new Paragraph("\nNO HAY ERRORES LEXICOS\n"));
+                }
+                else
+                {
+                    doc.Add(table);
+                }
                 doc.Close();
 
 
@@ -280,6 +287,56 @@ namespace _OLC1_Proyecto_1
                 MessageBox.Show("No se pudo crear el archivo PDF " + exe);
             }
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            contadorTablas--;
+            if (contadorTablas > -1)
+            {
+                string imagen = listaTablas.ElementAt(contadorTablas);
+                if (System.IO.File.Exists(imagen))
+                {
+                   // listaTablas.Add(imagen);
+                    System.Drawing.Image image = System.Drawing.Image.FromFile(imagen);
+                    pictureBox1.Image = image;
+                }
+            }
+            else
+            {
+                contadorTablas = 0;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            contadorTablas++;
+            if (contadorTablas < listaTablas.Count - 1)
+            {
+                string imagen = listaTablas.ElementAt(contadorTablas);
+                if (System.IO.File.Exists(imagen))
+                {
+                   // listaTablas.Add(imagen);
+                    Image image = Image.FromFile(imagen);
+                    pictureBox1.Image = image;
+                }
+            }
+            else
+            {
+                contadorTablas = listaAutomatas.Count - 1;
+            }
+        }
+
+        private void guardarErroresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ListaTokens.Count != 0)
+            {
+                Analizador.GenerarXML_Error(ListaTokens);
+            }
+            else
+            {
+                MessageBox.Show("Lista Vacia");
+            }
         }
     }
 }

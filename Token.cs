@@ -98,7 +98,22 @@ namespace _OLC1_Proyecto_1
         }
         public String GetValorToken()
         {
-            return valorToken;
+            switch (tipoToken)
+            {
+                case Tipo.SALTO_DE_LINEA:
+                    return "\\n";
+                    
+                case Tipo.COMILLA_SIMPLE_SOLA:
+                    return "\'";
+                    
+                case Tipo.COMILLA_DOBLE_SOLA:
+                    return "\"";
+                   
+                case Tipo.TABULACION:
+                    return "\\t";
+                default:
+                    return valorToken;
+            }
         }
 
         public Tipo GetTipoToken()

@@ -149,6 +149,10 @@ namespace _OLC1_Proyecto_1
                                 estado = 2;
                                 auxiliarLexema += c;
                             }//EMPIEZA COMPARACION PARA LOS SIMBOLOS
+                            else if (Char.IsWhiteSpace(c))
+                            {
+                                estado = 0;
+                            }
                             else if (c == '<')
                             { //COMENTARIO MULTIPLE
                                 auxiliarLexema += c;
@@ -312,12 +316,12 @@ namespace _OLC1_Proyecto_1
                                 esComentarioSimple = false;
                                 agregarToken(Token.Tipo.COMENTARIO_SIMPLE);
                             }
-                            else if (c == '/' && esCadena == false)
+                            else if (c == '/' && esCadena == false && esComentarioMultiple == false)
                             {
                                 auxiliarLexema += c;
                                 esComentarioSimple = true;
                             }
-                            else if (c == '!' && esCadena == false) // PARA COMENTARIOS <! 
+                            else if (c == '!' && esCadena == false && esComentarioSimple == false) // PARA COMENTARIOS <! 
                             {
                                 auxiliarLexema += c;
                                 esComentarioMultiple = true;
@@ -659,7 +663,7 @@ namespace _OLC1_Proyecto_1
         }
         public void GenerarXML(LinkedList<Token> lista)
         {
-            using (StreamWriter writer = new StreamWriter(@"Tokens HTML.txt"))
+            using (StreamWriter writer = new StreamWriter(@"Tokens.txt"))
             {
                 //INICIO 
                 String doc = "<ListaTokens>\n";
@@ -676,8 +680,30 @@ namespace _OLC1_Proyecto_1
                 writer.WriteLine(doc);
 
             }
-            MessageBox.Show("HTML creado", "Listado Tokens");
-            System.Diagnostics.Process.Start(@"Tokens HTML.txt");
+            MessageBox.Show("Tokens Guardados", "Listado Tokens");
+            System.Diagnostics.Process.Start(@"Tokens.txt");
+
+        }
+        public void GenerarXML_Error(LinkedList<Token> lista)
+        {
+            using (StreamWriter writer = new StreamWriter(@"Errores.txt"))
+            {
+                //INICIO 
+                String doc = "<ListaErrores>\n";
+                //AGREGA LOS TOKENS ENCONTRADOS
+                foreach (var Token in lista)
+                { 
+                    doc += "\t<ValorError>" + Token.GetValorToken() + "</ValorError>\n";
+                    doc += "\t<Fila>" + Token.GetFila() + "</Fila>\n";
+                    doc += "\t<Columna>" + Token.GetColumna() + "</Columna>\n</Token>";
+                }
+                //CERRAR HTML
+                doc += "</ListaTokens>";
+                writer.WriteLine(doc);
+
+            }
+            MessageBox.Show("Errores Guardados", "Listado Errores");
+            System.Diagnostics.Process.Start(@"Errores.txt");
 
         }
     }

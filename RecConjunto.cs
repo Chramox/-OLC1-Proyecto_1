@@ -19,7 +19,7 @@ namespace _OLC1_Proyecto_1
         List<Expresiones_Regulares> listaCadenasEv = new List<Expresiones_Regulares>();
         String inicio, final;
         Conjunto nuevo_conjunto;
-
+        bool dentroExpresion = true;
         public RecConjunto() { } //CONSTRUCTOR VACIO
 
         public Dictionary<string,Conjunto> GetConjuntos() 
@@ -37,6 +37,7 @@ namespace _OLC1_Proyecto_1
         //MINI ANALIZADOR SINTACTICO PARA RECONCER LOS CONJUNTOS Y TAMBIEN VA A RECONOCER LAS EXPRESIONES REGULARES
         public void ReconocerConjuntos(LinkedList<Token> lista) 
         {
+            dentroExpresion = true;
             this.listaTokens = lista;
             for (int i = 0; i < listaTokens.Count; i++)
             {
@@ -64,24 +65,39 @@ namespace _OLC1_Proyecto_1
         {
             Expresiones_Regulares expresion = new Expresiones_Regulares(tokenActual.GetValorToken());
             emparejar(Token.Tipo.IDENTIFICADOR);
-            emparejar(Token.Tipo.GUION);
-            emparejar(Token.Tipo.MAYOR);
-            while (tokenActual.GetTipoToken() != Token.Tipo.PUNTO_COMA)
+            if (tokenActual.GetTipoToken() == Token.Tipo.GUION)
             {
-                expresion.AñadirElemento(tokenActual);
-                controlToken++;
-                tokenActual = listaTokens.ElementAt(controlToken);
+                emparejar(Token.Tipo.GUION);
+                emparejar(Token.Tipo.MAYOR);
+                while (tokenActual.GetTipoToken() != Token.Tipo.PUNTO_COMA && dentroExpresion==true)
+                {
+                    expresion.AñadirElemento(tokenActual);
+                    controlToken++;
+                    tokenActual = listaTokens.ElementAt(controlToken);
+                }
+                emparejar(Token.Tipo.PUNTO_COMA);
+                if (!listaER.ContainsKey(expresion.GetNombre()))
+                {
+                    listaER.Add(expresion.GetNombre(), expresion);
+                }
             }
-            emparejar(Token.Tipo.PUNTO_COMA);
-            if (!listaER.ContainsKey(expresion.GetNombre()))
+            else if (tokenActual.GetTipoToken() == Token.Tipo.DOS_PUNTOS)
             {
-                listaER.Add(expresion.GetNombre(), expresion);
-            }
-            else
-            {
-                listaCadenasEv.Add(expresion);
+                emparejar(Token.Tipo.DOS_PUNTOS);
+                while (tokenActual.GetTipoToken() != Token.Tipo.PUNTO_COMA)
+                {
+                    expresion.AñadirElemento(tokenActual);
+                    controlToken++;
+                    tokenActual = listaTokens.ElementAt(controlToken);
+                }
+                emparejar(Token.Tipo.PUNTO_COMA);
+                if (listaER.ContainsKey(expresion.GetNombre()))
+                {
+                    listaCadenasEv.Add(expresion);
+                }
             }
         }
+
         private void CONJUNTO() 
         {
             emparejar(Token.Tipo.CONJUNTO);
@@ -124,7 +140,14 @@ namespace _OLC1_Proyecto_1
         private void emparejar(Token.Tipo tipo) //recibe el tipo para no perderme en el codigo
         {
             controlToken++;
-            tokenActual = listaTokens.ElementAt(controlToken);
+            if (controlToken < listaTokens.Count)
+            {
+                tokenActual = listaTokens.ElementAt(controlToken);
+            }
+            else
+            {
+                dentroExpresion = false;
+            }
         }
         /*                      GRAMATICA
          *      <CONJUNTO> ::= CONJ : Identificador -> <CONJUNTO2> ;
