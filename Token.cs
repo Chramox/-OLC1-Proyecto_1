@@ -75,7 +75,12 @@ namespace _OLC1_Proyecto_1
                                    // -----------------------------
                                    // PALABRAS RESERVADAS
             CONJUNTO,
-            GUION_CURVO
+            GUION_CURVO,
+            SALTO_DE_LINEA,
+            COMILLA_SIMPLE_SOLA,
+            COMILLA_DOBLE_SOLA,
+            TABULACION,
+            TODO
         }
         public Token() { } // NADA MAS INICIALIZANDO
         public Token(Tipo type, String val, int id, int fila, int columna)

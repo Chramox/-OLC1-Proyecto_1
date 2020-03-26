@@ -153,6 +153,16 @@ namespace _OLC1_Proyecto_1
                             { //COMENTARIO MULTIPLE
                                 auxiliarLexema += c;
                                 estado = 5;
+                            }//AÑADIENDO CARACTERES ESPECIALES
+                            else if (c == '\\')
+                            {
+                                auxiliarLexema += c;
+                                estado = 6;
+                            }
+                            else if (c == '[')
+                            {
+                                auxiliarLexema += c;
+                                estado = 7;
                             }
                             else if (c == '\"')
                             { //COMILLAS DOBLES --> CADENA
@@ -336,6 +346,138 @@ namespace _OLC1_Proyecto_1
                             }
                             break;
                         }
+                    case 6: //CARACTERES ESPECIALES: SALTO DE LINEA, TABULACION, COMILLA SIMPLE SOLA, COMILLA DOBLE SOLA
+                        {
+                            if (c == 'n')
+                            {
+                                auxiliarLexema += c;
+                                idToken = 1;
+                                agregarToken(Token.Tipo.SALTO_DE_LINEA);
+                            }
+                            else if (c == 't')
+                            {
+                                auxiliarLexema += c;
+                                idToken = 2;
+                                agregarToken(Token.Tipo.TABULACION);
+                            }
+                            else if (c == '\'')
+                            {
+                                auxiliarLexema += c;
+                                idToken = 3;
+                                agregarToken(Token.Tipo.COMILLA_SIMPLE_SOLA);
+                            }
+                            else if (c == '\"')
+                            {
+                                auxiliarLexema += c;
+                                idToken = 4;
+                                agregarToken(Token.Tipo.COMILLA_DOBLE_SOLA);
+                            }
+                            else
+                            {
+                                i--;
+                                reconocerSimbolos(c.ToString()); //añadiendo el \
+                            }
+                            break;
+                        }
+                    case 7: //CASE SOLO PARA TODO
+                        {
+                            int temp = i;
+                            string temp2 = "[";
+                            bool esTODO = true;
+                            if (c == ':')
+                            {
+                                temp++;
+                                temp2 += c;
+                                if (temp < caracteres.Length)
+                                {
+                                    c = caracteres[temp];
+                                    if (c == 't')
+                                    {
+                                        temp2 += c;
+                                        temp++;
+                                        if (temp < caracteres.Length)
+                                        {
+                                            c = caracteres[temp];
+                                            if (c == 'o')
+                                            {
+                                                temp2 += c;
+                                                temp++;
+                                                if (temp < caracteres.Length)
+                                                {
+                                                    c = caracteres[temp];
+                                                    if (c == 'd')
+                                                    {
+                                                        temp2 += c;
+                                                        temp++;
+                                                        if (temp < caracteres.Length)
+                                                        {
+                                                            c = caracteres[temp];
+                                                            if (c == 'o')
+                                                            {
+                                                                temp2 += c;
+                                                                temp++;
+                                                                if (temp < caracteres.Length)
+                                                                {
+                                                                    c = caracteres[temp];
+                                                                    if (c == ':')
+                                                                    {
+                                                                        temp2 += c;
+                                                                        temp++;
+                                                                        if (temp < caracteres.Length)
+                                                                        {
+                                                                            c = caracteres[temp];
+                                                                            if (c == ']')
+                                                                            {
+                                                                                temp2 += c;
+                                                                                i = temp;
+                                                                                auxiliarLexema = temp2;
+                                                                                palabrasReservadas(temp2);
+                                                                            }
+                                                                            else
+                                                                                esTODO = false;
+                                                                        }
+                                                                        else
+                                                                            esTODO = false;
+                                                                    }
+                                                                    else
+                                                                        esTODO = false;
+                                                                }
+                                                                else
+                                                                    esTODO = false;
+                                                            }
+                                                            else
+                                                                esTODO = false;
+                                                        }
+                                                        else
+                                                            esTODO = false;
+                                                    }
+                                                    else
+                                                        esTODO = false;
+                                                }
+                                                else
+                                                    esTODO = false;
+                                            }
+                                            else
+                                                esTODO = false;
+                                        }
+                                        else
+                                            esTODO = false;
+                                    }
+                                    else
+                                        esTODO = false;
+                                }
+                                else
+                                    esTODO = false;
+                            }
+                            else
+                                esTODO = false;
+                            if (esTODO == false)
+                            { 
+                                c = caracteres[i-1];
+                                reconocerSimbolos(c.ToString());
+                            }
+                            break;
+                        }
                 }
             }
         }
@@ -353,6 +495,10 @@ namespace _OLC1_Proyecto_1
             if (auxiliarLexema.Equals("CONJ"))
             {
                 agregarToken(Token.Tipo.CONJUNTO);
+            }
+            else if (auxiliarLexema.Equals("[:todo:]"))
+            {
+                agregarToken(Token.Tipo.TODO);
             }
             else
             {
@@ -511,37 +657,6 @@ namespace _OLC1_Proyecto_1
                         return false;
                 }
         }
-
-        /*  protected void definirConjuntos() 
-          {
-              Token token;
-              char inicio, final;
-              for (int i = 0; i < listaTokens.Count; i++)
-              {
-                  token = listaTokens.ElementAt(i);
-                  if (token.getTipoToken() == Token.Tipo.CONJUNTO)
-                  {
-                      // i = i + 2 -> nombre; i + 1 -> dos puntos, 
-                      i += 2;
-                      token = listaTokens.ElementAt(i);
-                      Conjunto conjunto = new Conjunto(token.getValorToken());
-                      i += 3; //saltandonos la flechita ->
-                      while (token.getTipoToken() != Token.Tipo.PUNTO_COMA)
-                      {
-                          if (token.getTipoToken() == Token.Tipo.CADENA)//AGREGAR SOLO EL ELEMENTO;
-                          {
-                              inicio = (char)token.getTipoToken();
-                              conjunto.agregarSimbolo(inicio);
-                          }
-                          else if (token.getTipoToken() == Token.Tipo.IDENTIFICADOR) //solo una letra es un identificador 
-                          {
-
-                          }
-                      }
-                  }
-              }
-          }*/
-
         public void GenerarXML(LinkedList<Token> lista)
         {
             using (StreamWriter writer = new StreamWriter(@"Tokens HTML.txt"))
