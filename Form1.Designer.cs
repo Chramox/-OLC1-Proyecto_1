@@ -59,6 +59,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.reporteDeTokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -264,7 +265,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1391, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1391, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -275,7 +276,7 @@
             this.guardarArchivoToolStripMenuItem,
             this.nuevaPestañaToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 26);
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
             // abrirArchivoToolStripMenuItem
@@ -305,9 +306,10 @@
             this.cargarTomhsonToolStripMenuItem,
             this.guardarToolStripMenuItem,
             this.guardarErroresToolStripMenuItem,
-            this.reporteDeErroresLexicosToolStripMenuItem});
+            this.reporteDeErroresLexicosToolStripMenuItem,
+            this.reporteDeTokensToolStripMenuItem});
             this.herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
-            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
+            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(112, 24);
             this.herramientasToolStripMenuItem.Text = "Herramientas";
             // 
             // cargarTomhsonToolStripMenuItem
@@ -341,13 +343,20 @@
             // acercaDeToolStripMenuItem
             // 
             this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
-            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(91, 26);
+            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(91, 24);
             this.acercaDeToolStripMenuItem.Text = "Acerca De";
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "Archivos Calificacion(*.er)|*.er|Archivos de texto (*.txt)|*.txt";
+            // 
+            // reporteDeTokensToolStripMenuItem
+            // 
+            this.reporteDeTokensToolStripMenuItem.Name = "reporteDeTokensToolStripMenuItem";
+            this.reporteDeTokensToolStripMenuItem.Size = new System.Drawing.Size(268, 26);
+            this.reporteDeTokensToolStripMenuItem.Text = "Reporte de Tokens";
+            this.reporteDeTokensToolStripMenuItem.Click += new System.EventHandler(this.reporteDeTokensToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -412,6 +421,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem reporteDeTokensToolStripMenuItem;
     }
 }
 

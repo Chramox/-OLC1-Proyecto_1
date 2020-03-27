@@ -205,6 +205,10 @@ namespace _OLC1_Proyecto_1
                                         }
                                     }
                                 }
+                                else
+                                {
+                                    estado = 4;
+                                }
                             }
 
                         }
@@ -693,13 +697,14 @@ namespace _OLC1_Proyecto_1
                 String doc = "<ListaErrores>\n";
                 //AGREGA LOS TOKENS ENCONTRADOS
                 foreach (var Token in lista)
-                { 
+                {
+                    doc += "<Error>\n";
                     doc += "\t<ValorError>" + Token.GetValorToken() + "</ValorError>\n";
                     doc += "\t<Fila>" + Token.GetFila() + "</Fila>\n";
-                    doc += "\t<Columna>" + Token.GetColumna() + "</Columna>\n</Token>";
+                    doc += "\t<Columna>" + Token.GetColumna() + "</Columna>\n</Error>\n";
                 }
                 //CERRAR HTML
-                doc += "</ListaTokens>";
+                doc += "</ListaErrores>";
                 writer.WriteLine(doc);
 
             }

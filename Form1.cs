@@ -79,35 +79,39 @@ namespace _OLC1_Proyecto_1
 
                 Console.WriteLine("PRUEBA THOMPSON------------------------------------------------------------");
                 AFN Thompson = new AFN(Analizador.GetCadenasEv(), Analizador.GetConjuntos());
-                foreach (var item in Analizador.GetListaER())
+                if (Analizador.GetListaER() != null)
                 {
-                    Expresiones_Regulares expresion = item.Value;
+                    foreach (var item in Analizador.GetListaER())
+                    {
+                        Expresiones_Regulares expresion = item.Value;
 
-                    Thompson.GenerarAFN(expresion);
-                    rutaAFN = Thompson.GenerarGraphviz();
-                    if (System.IO.File.Exists(rutaAFN))
-                    {
-                        listaAutomatas.Add(rutaAFN);
-                        //Image image = Image.FromFile(rutaAFN);
-                        //pictureBox1.Image = image;
+                        Thompson.GenerarAFN(expresion);
+                        rutaAFN = Thompson.GenerarGraphviz();
+                        if (System.IO.File.Exists(rutaAFN))
+                        {
+                            listaAutomatas.Add(rutaAFN);
+                            //Image image = Image.FromFile(rutaAFN);
+                            //pictureBox1.Image = image;
+                        }
+                        //GENERANDO AFD APARTIR DE UN AFN
+                        string[] imagenesAFD = Thompson.CrearAFD(); //posicion 0 = afd; posicion 1 = tabla afd
+                        rutaAFD_Tabla = imagenesAFD[1];
+                        if (System.IO.File.Exists(rutaAFD_Tabla))
+                        {
+                            listaTablas.Add(rutaAFD_Tabla);
+                            System.Drawing.Image image = System.Drawing.Image.FromFile(rutaAFD_Tabla);
+                            pictureBox2.Image = image;
+                        }
+                        if (System.IO.File.Exists(imagenesAFD[0]))
+                        {
+                            listaAutomatas.Add(imagenesAFD[0]);
+                            System.Drawing.Image image = System.Drawing.Image.FromFile(imagenesAFD[0]);
+                            pictureBox1.Image = image;
+                        }
+                        contadorIMG++;
                     }
-                    //GENERANDO AFD APARTIR DE UN AFN
-                    string[] imagenesAFD = Thompson.CrearAFD(); //posicion 0 = afd; posicion 1 = tabla afd
-                    rutaAFD_Tabla = imagenesAFD[1];
-                    if (System.IO.File.Exists(rutaAFD_Tabla))
-                    {
-                        listaTablas.Add(rutaAFD_Tabla);
-                        System.Drawing.Image image = System.Drawing.Image.FromFile(rutaAFD_Tabla);
-                        pictureBox2.Image = image;
-                    }
-                    if (System.IO.File.Exists(imagenesAFD[0]))
-                    {
-                        listaAutomatas.Add(imagenesAFD[0]);
-                        System.Drawing.Image image = System.Drawing.Image.FromFile(imagenesAFD[0]);
-                        pictureBox1.Image = image;
-                    }
-                    contadorIMG++;
                 }
+                
             }
             richTextBox2.Text = textConsola;
             contador = listaAutomatas.Count - 1;
@@ -254,7 +258,7 @@ namespace _OLC1_Proyecto_1
 
                 PdfPTable table = new PdfPTable(3);
 
-                PdfPCell cell = new PdfPCell(new Phrase("Header spanning 3 columns"));
+                PdfPCell cell = new PdfPCell(new Phrase("Lista de errores"));
                 cell.Colspan = 3;
                 cell.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
                 table.AddCell(cell);
@@ -333,13 +337,68 @@ namespace _OLC1_Proyecto_1
 
         private void guardarErroresToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ListaTokens.Count != 0)
+            if (ListaErrores.Count != 0)
             {
-                Analizador.GenerarXML_Error(ListaTokens);
+                Analizador.GenerarXML_Error(ListaErrores);
             }
             else
             {
                 MessageBox.Show("Lista Vacia");
+            }
+        }
+
+        private void reporteDeTokensToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (File.Exists(@"ReporteTOKENS.pdf"))
+                {
+                    File.Delete(@"ReporteTOKENS.pdf");
+                }
+                Document doc = new Document(PageSize.LETTER, 10, 10, 42, 35);
+                PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("ReporteTOKENS.pdf", FileMode.Create));
+                doc.Open();
+
+
+                PdfPTable table = new PdfPTable(4);
+
+                PdfPCell cell = new PdfPCell(new Phrase("Lista de tokens"));
+                cell.Colspan = 4;
+                cell.HorizontalAlignment = 1; //0=Left, 1=Centre, 2=Right
+                table.AddCell(cell);
+                table.AddCell("TIPO");
+                table.AddCell("VALOR");
+                table.AddCell("COLUMNA");
+                table.AddCell("FILA");
+
+                foreach (var error in ListaTokens)
+                {
+                    table.AddCell(error.GetTipoToken().ToString());
+                    table.AddCell(error.GetValorToken());
+                    table.AddCell(error.GetColumna().ToString());
+                    table.AddCell(error.GetFila().ToString());
+                }
+
+                doc.Add(new Paragraph("\n\n\n\n"));
+
+                if (ListaTokens.Count == 0)
+                {
+                    doc.Add(new Paragraph("\nNO HAY TOKENS\n"));
+                }
+                else
+                {
+                    doc.Add(table);
+                }
+                doc.Close();
+
+
+                //   MessageBox.Show("PDF creado con éxito");
+                System.Diagnostics.Process.Start(@"ReporteTOKENS.pdf");
+            }
+            catch (Exception exe)
+            {
+
+                MessageBox.Show("No se pudo crear el archivo PDF " + exe);
             }
         }
     }
