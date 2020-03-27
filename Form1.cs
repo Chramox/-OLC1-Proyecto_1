@@ -327,7 +327,7 @@ namespace _OLC1_Proyecto_1
             }
             else
             {
-                contadorTablas = listaAutomatas.Count - 1;
+                contadorTablas = listaTablas.Count - 1;
             }
         }
 
