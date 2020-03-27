@@ -144,7 +144,7 @@ namespace _OLC1_Proyecto_1
                                 estado = 1;
                                 auxiliarLexema += c;
                             }
-                            else if (Char.IsLetter(c))
+                            else if ((c > 64 && c < 91) || (c > 96 && c < 123))
                             {
                                 estado = 2;
                                 auxiliarLexema += c;
@@ -207,6 +207,7 @@ namespace _OLC1_Proyecto_1
                                 }
                                 else
                                 {
+                                    auxiliarLexema += c;
                                     estado = 4;
                                 }
                             }
@@ -248,7 +249,7 @@ namespace _OLC1_Proyecto_1
                         break;
                     case 2://RESERVADAS Y LETRAS
                         {
-                            if (Char.IsLetter(c))
+                            if ((c > 64 && c<91) || (c>96 && c<123) )
                             {
                                 estado = 2;
                                 auxiliarLexema += c;
@@ -520,6 +521,7 @@ namespace _OLC1_Proyecto_1
             //idToken = 0
             listaErrores.AddLast(new Token(Token.Tipo.ERROR, auxiliarLexema, idToken, fila, columna));
             estado = 0;
+            auxiliarLexema = "";
         }
         public void reconocerComentarios(String auxiliarLexema)
         {
