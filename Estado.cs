@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _OLC1_Proyecto_1
 {
+    [Serializable]
     class Estado //ESTADOS DEL AUTOMATA FINITO
     {
         int noEstado;
@@ -44,6 +45,7 @@ namespace _OLC1_Proyecto_1
         {
             return tipoEstado;
         }
+
         public int GetNoEstado() 
         {
             return noEstado;

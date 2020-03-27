@@ -131,14 +131,18 @@ namespace _OLC1_Proyecto_1
         }
         private void guardarToolStripMenuItem_Click(object sender, EventArgs e) 
         {
-            if (ListaTokens.Count != 0)
+            if (ListaTokens != null)
             {
-                Analizador.GenerarXML(ListaTokens);
+                if (ListaTokens.Count != 0)
+                {
+                    Analizador.GenerarXML(ListaTokens);
+                }
+                else
+                {
+                    MessageBox.Show("Lista Vacia");
+                }
             }
-            else
-            {
-                MessageBox.Show("Lista Vacia");
-            }
+            
         }
 
         private void guardarArchivoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -299,7 +303,7 @@ namespace _OLC1_Proyecto_1
                 {
                    // listaTablas.Add(imagen);
                     System.Drawing.Image image = System.Drawing.Image.FromFile(imagen);
-                    pictureBox1.Image = image;
+                    pictureBox2.Image = image;
                 }
             }
             else
@@ -318,7 +322,7 @@ namespace _OLC1_Proyecto_1
                 {
                    // listaTablas.Add(imagen);
                     Image image = Image.FromFile(imagen);
-                    pictureBox1.Image = image;
+                    pictureBox2.Image = image;
                 }
             }
             else

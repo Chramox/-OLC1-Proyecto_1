@@ -327,7 +327,14 @@ namespace _OLC1_Proyecto_1
                         estadosFinales.Add(estado.GetNombreEstadoAFD());
                     }
                 }
-                
+                estado = item.GetEstadoLlegada();
+                if (!estadosFinales.Contains(estado.GetNombreEstadoAFD()))
+                {
+                    if (estado.GetTipo() == EstadoAFD.Tipo.FINAL)
+                    {
+                        estadosFinales.Add(estado.GetNombreEstadoAFD());
+                    }
+                }
             }
             string impresion = "";
            // Mueve mueveActual = mueveSinVacio.First();
@@ -399,8 +406,15 @@ namespace _OLC1_Proyecto_1
                             break;
                         }
                     }
-                    else if(simboloTransicion == letra.ToString())
+                    else if (simboloTransicion == letra.ToString())
                     {
+                        estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
+                        valido = true;
+                        break;
+                    }
+                    else if (simboloTransicion.Equals("[:todo:]"))
+                    {
+
                         estadoActual = mueve.GetEstadoLlegada().GetNombreEstadoAFD();
                         valido = true;
                         break;

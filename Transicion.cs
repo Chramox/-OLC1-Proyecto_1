@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace _OLC1_Proyecto_1
 {
+    [Serializable]
     class Transicion
     {
         Estado primero;

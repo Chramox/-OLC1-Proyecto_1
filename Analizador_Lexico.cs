@@ -313,6 +313,7 @@ namespace _OLC1_Proyecto_1
                             estado = 5;
                             if ((i + 1) == caracteres.Length && esComentarioSimple)
                             {//FIN COMENTARIO SIMPLE
+                                auxiliarLexema += c;
                                 esComentarioSimple = false;
                                 agregarToken(Token.Tipo.COMENTARIO_SIMPLE);
                             }

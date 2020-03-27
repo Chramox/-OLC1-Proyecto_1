@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -57,8 +59,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -92,6 +92,30 @@
             this.panel1.Size = new System.Drawing.Size(1391, 937);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.button2.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_derecha;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.Location = new System.Drawing.Point(1272, 527);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(51, 36);
+            this.button2.TabIndex = 14;
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.button1.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_izquierda;
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(1215, 527);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(51, 36);
+            this.button1.TabIndex = 13;
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // panel4
             // 
@@ -240,7 +264,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1391, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1391, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -251,7 +275,7 @@
             this.guardarArchivoToolStripMenuItem,
             this.nuevaPestañaToolStripMenuItem});
             this.archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
+            this.archivoToolStripMenuItem.Size = new System.Drawing.Size(73, 26);
             this.archivoToolStripMenuItem.Text = "Archivo";
             // 
             // abrirArchivoToolStripMenuItem
@@ -283,7 +307,7 @@
             this.guardarErroresToolStripMenuItem,
             this.reporteDeErroresLexicosToolStripMenuItem});
             this.herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
-            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(112, 24);
+            this.herramientasToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
             this.herramientasToolStripMenuItem.Text = "Herramientas";
             // 
             // cargarTomhsonToolStripMenuItem
@@ -317,37 +341,13 @@
             // acercaDeToolStripMenuItem
             // 
             this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
-            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(91, 24);
+            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(91, 26);
             this.acercaDeToolStripMenuItem.Text = "Acerca De";
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.button1.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_izquierda;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button1.Location = new System.Drawing.Point(1215, 527);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(51, 36);
-            this.button1.TabIndex = 13;
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.button2.BackgroundImage = global::_OLC1_Proyecto_1.Properties.Resources.flecha_derecha;
-            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button2.Location = new System.Drawing.Point(1272, 527);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(51, 36);
-            this.button2.TabIndex = 14;
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.openFileDialog1.Filter = "Archivos Calificacion(*.er)|*.er|Archivos de texto (*.txt)|*.txt";
             // 
             // Form1
             // 

@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace _OLC1_Proyecto_1
 {
-    
-    class AFN
+
+    class AFN 
     {
         //AUTOMATA FINITO NO DETERMINISTA
+       
         List<Estado> conjuntoEst_Normales = new List<Estado>();
         List<string> listaTerminales = new List<string>();
         Estado Inicial;
@@ -20,18 +21,7 @@ namespace _OLC1_Proyecto_1
         List<Expresiones_Regulares> cadenas;
         Dictionary<string, Conjunto> listaConjuntos;
         Expresiones_Regulares expresion;
-        public AFN ClonarAFN(AFN clonar) 
-        {
-            AFN nuevo = new AFN();
-            nuevo.Inicial = clonar.Inicial;
-            nuevo.Final = clonar.Final;
-            foreach (var item in clonar.GetListaEstados())
-            {
-                nuevo.GetListaEstados().Add(item);
-            }
 
-            return nuevo;
-        }
         public AFN() { }
         public AFN(List<Expresiones_Regulares> listaCadenas, Dictionary<string, Conjunto> listaConjuntos) 
         { 
@@ -53,7 +43,7 @@ namespace _OLC1_Proyecto_1
             Token tokenKleen = new Token(Token.Tipo.ASTERISCO, "*");
             Token tokenConcat = new Token(Token.Tipo.PUNTO, ".");
             Token tokenAnt = new Token(Token.Tipo.CADENA, " ");
-           int contAux;
+            int contAux;
             for (int i = 0; i < listaTokens.Count; i++)
             {
                 contAux = i;
@@ -98,18 +88,30 @@ namespace _OLC1_Proyecto_1
                                 {
                                     primerTerminal = true;
                                     segundoTerminal = false;
+                                    if (tokenAnt.GetTipoToken() == Token.Tipo.PUNTO || tokenAnt.GetTipoToken() == Token.Tipo.PALITO_OR)
+                                    {
+                                        anteriorBinario = true;
+                                    }
                                     break;
                                 }
                             case Token.Tipo.OP_SUMA: //CERRADURA POSITIVA
                                 {
                                     primerTerminal = true;
                                     segundoTerminal = false;
+                                    if (tokenAnt.GetTipoToken() == Token.Tipo.PUNTO || tokenAnt.GetTipoToken() == Token.Tipo.PALITO_OR)
+                                    {
+                                        anteriorBinario = true;
+                                    }
                                     break;
                                 }
                             case Token.Tipo.PREGUNTA_CIERRE: //APARICION
                                 {
                                     primerTerminal = true;
                                     segundoTerminal = false;
+                                    if (tokenAnt.GetTipoToken() == Token.Tipo.PUNTO || tokenAnt.GetTipoToken() == Token.Tipo.PALITO_OR)
+                                    {
+                                        anteriorBinario = true;
+                                    }
                                     break;
                                 }
                             default:
@@ -262,6 +264,15 @@ namespace _OLC1_Proyecto_1
                         stackAFN.Push(alternancia);
                         break;
                     }
+                //case Token.Tipo.OP_SUMA: //CERRADURA POSITIVA
+                //    {
+                //        AFN clonar = stackAFN.Pop();
+                //        AFN kleen = CerraduraKleen(clonar);
+                //        AFN nuevo = ObjectExtension.CopyObject<AFN>(clonar);
+                //        AFN concat = Concatenacion(nuevo, kleen);
+                //        stackAFN.Push(concat);
+                //        break;
+                //    }
                 case Token.Tipo.ASTERISCO: //CERRADURA DE KLEEN
                     {
 
